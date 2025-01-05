@@ -16,7 +16,7 @@ def main():
     st.title("🌍 Анализ температурных данных")
 
     tab1, tab2, tab3, tab4 = st.tabs(
-        ["📁 Загрузка данных", "📊 Анализ данных", "🌡️ Текущая температура", "📈 Визуализация"]
+        ["📁 Загрузка данных", "📊 Анализ данных", "📈 Визуализация", "🌡️ Текущая температура OpenWeatherAPI"]
     )
 
     with tab1:
@@ -24,9 +24,9 @@ def main():
     with tab2:
         analyze_data(session)
     with tab3:
-        monitor_temperature(session)
-    with tab4:
         visualize_data(session)
+    with tab4:
+        monitor_temperature(session)
 
 
     st.markdown(

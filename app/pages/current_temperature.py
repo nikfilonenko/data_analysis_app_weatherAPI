@@ -20,6 +20,9 @@ def monitor_temperature(session: LoggedSession):
         if current_temp:
             st.write(f"Текущая температура в {city}: {current_temp}°C")
         else:
-            st.error("Ошибка при получении данных. Проверьте API ключ.")
+            st.error("Неверный ключ API. "
+                     "Пожалуйста, смотрите раздел "
+                     "https://openweathermap.org/faq#error401 "
+                     "для получения дополнительной информации.")
     else:
         st.warning("Введите API ключ для отображения данных.")

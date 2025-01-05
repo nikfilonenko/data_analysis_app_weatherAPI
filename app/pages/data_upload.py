@@ -14,5 +14,17 @@ def upload_dataset(session: LoggedSession):
         df = pd.read_csv(uploaded_file)
         session.df = df  # Сохраняем данные в сессии
         st.success("Данные успешно загружены!")
-        st.write("Первые 5 строк данных:")
-        st.dataframe(df.head())
+        st.write(f"Все данные `{uploaded_file.name}`:")
+
+        st.markdown(
+            """
+            <style>
+                .main .block-container {
+                    max-width: 100%;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.dataframe(df, width=1000)
