@@ -2,7 +2,7 @@ import streamlit as st
 from logging_config import LoggedSession
 from settings.api_client import OpenWeatherMapClient
 
-owmc = OpenWeatherMapClient(api_key='0c72e4f1bde036c89d29269be6c5a7dd')
+owmc = OpenWeatherMapClient(api_key='...')
 
 def monitor_temperature(session: LoggedSession):
     st.header("🌡️ Текущая температура")
