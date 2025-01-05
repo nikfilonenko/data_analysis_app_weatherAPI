@@ -1,11 +1,11 @@
 import sys
 from pathlib import Path
 import streamlit as st
-from logging_config import LoggedSession
-from pages.data_upload import upload_dataset
-from pages.data_analysis import analyze_data
-from pages.current_temperature import monitor_temperature
-from pages.visualization import visualize_data
+from app.logging_config import LoggedSession
+from app.pages.data_upload import upload_dataset
+from app.pages.data_analysis import analyze_data
+from app.pages.current_temperature import monitor_temperature
+from app.pages.visualization import visualize_data
 
 
 sys.path.append(str(Path(__file__).resolve().parent))

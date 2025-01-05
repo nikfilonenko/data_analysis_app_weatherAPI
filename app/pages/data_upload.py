@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from logging_config import LoggedSession
+from app.logging_config import LoggedSession
 
 
 def upload_dataset(session: LoggedSession):

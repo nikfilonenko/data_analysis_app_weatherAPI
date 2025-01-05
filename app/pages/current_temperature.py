@@ -1,6 +1,6 @@
 import streamlit as st
-from logging_config import LoggedSession
-from settings.api_client import OpenWeatherMapClient
+from app.logging_config import LoggedSession
+from app.settings.api_client import OpenWeatherMapClient
 
 owmc = OpenWeatherMapClient(api_key='...')
 

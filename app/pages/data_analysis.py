@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from logging_config import LoggedSession
+from app.logging_config import LoggedSession
 from scipy.stats import skew, kurtosis
 
 
