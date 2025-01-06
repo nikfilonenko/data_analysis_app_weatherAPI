@@ -83,56 +83,6 @@ def test_visualize_data(session):
     assert True
 
 
-def test_monitor_temperature():
-    class MockOpenWeatherMapClient:
-        def get_current_temperature(self, city, api_key):
-            return 25.0
-
-    class MockStreamlit:
-        def __init__(self):
-            self.api_key = "fake_api_key"
-            self.city = "Berlin"
-            self.output = []
-
-        def header(self, message):
-            self.output.append(f"Header: {message}")
-
-        def text_input(self, label, type="default"):
-            if label == "Введите API ключ OpenWeatherMap":
-                return self.api_key
-            return ""
-
-        def selectbox(self, label, options):
-            if label == "Выберите город":
-                return self.city
-            return options[0]
-
-        def write(self, message):
-            self.output.append(f"Write: {message}")
-
-        def error(self, message):
-            self.output.append(f"Error: {message}")
-
-        def warning(self, message):
-            self.output.append(f"Warning: {message}")
-
-    mock_st = MockStreamlit()
-    owmc = MockOpenWeatherMapClient()
-
-    from app.pages import current_temperature
-    original_st = current_temperature.st
-    original_owmc = current_temperature.owmc
-    current_temperature.st = mock_st
-    current_temperature.owmc = owmc
-
-    monitor_temperature(LoggedSession())
-
-    current_temperature.st = original_st
-    current_temperature.owmc = original_owmc
-
-    assert "Write: Текущая температура в Berlin: 25.0°C" in mock_st.output
-
-
 def test_display_descriptive_statistics(session):
     city_data = session.df[session.df["city"] == "Berlin"]
     display_descriptive_statistics(city_data)

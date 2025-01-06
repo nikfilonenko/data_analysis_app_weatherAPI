@@ -117,3 +117,4 @@ def monitor_temperature(session: LoggedSession):
                      "для получения дополнительной информации.")
     else:
         st.warning("Введите API ключ для отображения данных.")
+
