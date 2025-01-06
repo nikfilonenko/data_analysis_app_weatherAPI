@@ -12,6 +12,9 @@ def upload_dataset(session: LoggedSession):
         df = pd.read_csv(uploaded_file)
         session.df = df
         st.success("Данные успешно загружены!")
+
+        st.markdown(f"- Столбцы: **{df.columns.tolist()}**")
+        st.markdown(f"- Всего строк: `{len(df)}`")
         st.write(f"Все данные `{uploaded_file.name}`:")
 
         st.markdown(

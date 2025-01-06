@@ -130,7 +130,12 @@ def display_seasonal_profiles(city_data, city):
     st.subheader("Сезонные профили температуры")
 
     seasonal_data = city_data.groupby("season")["temperature"].agg(
-        [("mean", "mean"), ("median", "median"), ("q1", lambda x: x.quantile(0.25)), ("q3", lambda x: x.quantile(0.75)), ("count", "size")]
+        mean="mean",
+        std="std",
+        median="median",
+        q1=lambda x: x.quantile(0.25),
+        q3=lambda x: x.quantile(0.75),
+        count="size"
     ).reset_index()
 
     fig = go.Figure()
@@ -138,7 +143,7 @@ def display_seasonal_profiles(city_data, city):
         go.Bar(
             x=seasonal_data["season"],
             y=seasonal_data["mean"],
-            error_y=dict(type="data", array=seasonal_data["mean"] - seasonal_data["q1"], visible=True),
+            error_y=dict(type="data", array=seasonal_data["std"], visible=True),
             name="Средняя температура",
         )
     )
@@ -153,6 +158,7 @@ def display_seasonal_profiles(city_data, city):
     for index, row in seasonal_data.iterrows():
         season = row["season"]
         mean_temp = row["mean"]
+        std_temp = row["std"]
         median_temp = row["median"]
         q1_temp = row["q1"]
         q3_temp = row["q3"]
@@ -162,6 +168,7 @@ def display_seasonal_profiles(city_data, city):
             st.markdown(f"""
             #### Сезон: **{season}**
             - **Средняя температура**: `{mean_temp:.2f}°C`
+            - **Стандартное отклонение**: `{std_temp:.2f}°C`
             - **Медианная температура**: `{median_temp:.2f}°C`
             - **25-й процентиль (Q1)**: `{q1_temp:.2f}°C`
             - **75-й процентиль (Q3)**: `{q3_temp:.2f}°C`
@@ -184,7 +191,6 @@ def display_seasonal_profiles(city_data, city):
 
 
 def calculate_moving_average(data, window=30):
-    """Вычисляет скользящее среднее температуры."""
     return data["temperature"].rolling(window=window, min_periods=1).mean()
 
 
@@ -205,7 +211,6 @@ def analyze_city(city_data):
 
 
 def analyze_data_parallel(df):
-    """Анализирует данные для всех городов параллельно."""
     cities = df["city"].unique()
     with Pool() as pool:
         results = pool.map(analyze_city, [df[df["city"] == city] for city in cities])
@@ -213,7 +218,6 @@ def analyze_data_parallel(df):
 
 
 def analyze_data_sequential(df):
-    """Анализирует данные для всех городов последовательно."""
     results = []
     for city in df["city"].unique():
         city_data = df[df["city"] == city]
@@ -222,17 +226,29 @@ def analyze_data_sequential(df):
 
 
 def display_moving_average(city_data, city):
-    """Отображает скользящее среднее температуры."""
     st.subheader("Скользящее среднее температуры (30 дней)")
     fig = px.line(city_data, x="timestamp", y="moving_avg", title=f"Скользящее среднее температуры в городе {city}")
     st.plotly_chart(fig, use_container_width=True)
 
 
+def classify_anomalies(city_data):
+    mean_temp = city_data["temperature"].mean()
+    anomalies = city_data[city_data["is_anomaly"]]
+    low_anomalies = anomalies[anomalies["temperature"] < mean_temp]
+    high_anomalies = anomalies[anomalies["temperature"] > mean_temp]
+    return low_anomalies, high_anomalies
+
+
 def display_anomalies(city_data, city):
-    """Отображает аномалии температуры."""
     st.subheader("Аномалии температуры")
     anomalies = city_data[city_data["is_anomaly"]]
     st.write(f"Количество аномалий: {len(anomalies)}")
+
+    with st.expander(f"📊 Классификация аномалий"):
+        low_anomalies, high_anomalies = classify_anomalies(city_data)
+        st.write(f"- Низкие аномалии (ниже среднего): {len(low_anomalies)}")
+        st.write(f"- Высокие аномалии (выше среднего): {len(high_anomalies)}")
+
     fig = px.scatter(anomalies, x="timestamp", y="temperature", title=f"Аномалии температуры в городе {city}")
     st.plotly_chart(fig, use_container_width=True)
 
@@ -246,13 +262,10 @@ def analyze_data(session: LoggedSession):
 
     df = session.df
 
-    # Выбор города
     city = st.selectbox("Выберите город", df["city"].unique(), key="city_selectbox")
 
-    # Фильтрация данных по городу
     city_data = df[df["city"] == city]
 
-    # Выбор режима анализа (параллельный или последовательный)
     analysis_mode = st.radio("Режим анализа", ["Последовательный", "Параллельный"])
 
     if st.button("Запустить анализ"):
@@ -268,7 +281,6 @@ def analyze_data(session: LoggedSession):
         end_time = time.time()
         st.success(f"Анализ завершен за {end_time - start_time:.2f} секунд.")
 
-        # Отображение результатов для выбранного города
         for result in results:
             if result["city"].iloc[0] == city:
                 city_data = result
