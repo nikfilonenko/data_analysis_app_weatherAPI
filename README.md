@@ -40,7 +40,7 @@
 
 #### 2. Исследование распараллеливания анализа данных <a name="022"></a>
 
-![img_4.png](assets/img.png)
+![img_4.png](assets/img_4.png)
 
 ![img_1.png](assets/img_1.png)
 
