@@ -3,7 +3,6 @@
 
 [![app Weather Analysis CI/CD](https://github.com/nikfilonenko/data_analysis_app_weatherAPI/actions/workflows/app_weather_analysis.yml/badge.svg)](https://github.com/nikfilonenko/data_analysis_app_weatherAPI/actions/workflows/app_weather_analysis.yml)
 
-<br>
 
 ## 🌐 Ссылка на развернутое приложение в Streamlit Cloud: [Здесь](https://dataanalysisappweatherapi-kjje8rplqtbrfqz3rpzqcu.streamlit.app/)
 
@@ -14,8 +13,6 @@
 ## 📊 Ноутбук с дополнительными исследованиями: [Здесь](app/notebooks/data_analysis.ipynb)
 
 `app/notebooks/data_analysis.ipynb`
-
-<br>
 
 -----
 
