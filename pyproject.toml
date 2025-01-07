@@ -6,7 +6,7 @@ authors = ["nikita filonenko"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.12,<3.13"
+python = ">=3.11,<3.12"
 streamlit = "^1.41.1"
 numpy = "^2.2.1"
 pandas = "^2.2.3"
